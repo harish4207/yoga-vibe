@@ -1,0 +1,45 @@
+{
+  "name": "yoga-new",
+  "version": "1.0.0",
+  "description": "A comprehensive yoga platform built with the MERN stack, offering live and recorded yoga classes, personalized plans, and a vibrant community.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "craco start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@google/generative-ai": "^0.24.1",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/material": "^7.1.0",
+    "@reduxjs/toolkit": "^2.8.2",
+    "@stripe/stripe-js": "^7.3.1",
+    "autoprefixer": "^10.4.21",
+    "axios": "^1.9.0",
+    "cookie-session": "^2.1.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "formik": "^2.4.6",
+    "framer-motion": "^12.15.0",
+    "openai": "^5.1.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "postcss": "^8.5.4",
+    "razorpay": "^2.9.6",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.6.1",
+    "react-scripts": "^5.0.1",
+    "react-toastify": "^11.0.5",
+    "tailwindcss": "^4.1.8",
+    "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-normalize": "^13.0.1",
+    "postcss-preset-env": "^10.2.0"
+  }
+}
