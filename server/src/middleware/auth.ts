@@ -2,9 +2,15 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
 import { User, IUser } from '../models/User';
-import { AuthRequest } from '../types/express';
+import mongoose, { Document } from 'mongoose';
 
-export const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
+declare module 'express' {
+  export interface Request {
+    user?: IUser & Document;
+  }
+}
+
+export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -20,7 +26,7 @@ export const auth = async (req: AuthRequest, res: Response, next: NextFunction) 
       return res.status(401).json({ success: false, message: 'User not found' });
     }
 
-    req.user = user;
+    req.user = user as IUser & mongoose.Document;
     next();
   } catch (err) {
     res.status(401).json({ success: false, message: 'Token is not valid' });

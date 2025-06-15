@@ -2,15 +2,10 @@ import { Request, Response } from 'express';
 import UserGoal from '../models/UserGoal';
 import { IUser } from '../models/User'; // Assuming IUser is exported from User model
 
-// Extend Request to include user
-interface AuthRequest extends Request {
-  user?: IUser; // Use IUser type for user
-}
-
 // @desc    Get user goals
 // @route   GET /api/goals/my-goals
 // @access  Private
-export const getUserGoals = async (req: AuthRequest, res: Response) => {
+export const getUserGoals = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
 
@@ -37,7 +32,7 @@ export const getUserGoals = async (req: AuthRequest, res: Response) => {
 // @desc    Update user goals
 // @route   PUT /api/goals/my-goals
 // @access  Private
-export const updateUserGoals = async (req: AuthRequest, res: Response) => {
+export const updateUserGoals = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
     const { goals, preferences } = req.body;

@@ -3,12 +3,11 @@ import CommunityPost, { ICommunityPost, IComment } from '../models/CommunityPost
 import { Content } from '../models/Content';
 import { IUser } from '../models/User'; // Assuming IUser is exported from User model
 import mongoose from 'mongoose';
-import { AuthRequest } from '../types/express';
 
 // @desc    Create a new community post
 // @route   POST /api/community/posts
 // @access  Private (User)
-export const createPost = async (req: AuthRequest, res: Response) => {
+export const createPost = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
     const { content } = req.body;
@@ -37,7 +36,7 @@ export const createPost = async (req: AuthRequest, res: Response) => {
 // @desc    Get all community posts (excluding deleted ones for users)
 // @route   GET /api/community/posts
 // @access  Public/Private (User/Admin)
-export const getPosts = async (req: AuthRequest, res: Response) => {
+export const getPosts = async (req: Request, res: Response) => {
   try {
     // Admins can see all posts, users only non-deleted
     const filter = req.user?.role === 'admin' ? {} : { isDeleted: false };
@@ -57,7 +56,7 @@ export const getPosts = async (req: AuthRequest, res: Response) => {
 // @desc    Get a single community post by ID
 // @route   GET /api/community/posts/:postId
 // @access  Public/Private
-export const getPostById = async (req: AuthRequest, res: Response) => {
+export const getPostById = async (req: Request, res: Response) => {
   try {
     const { postId } = req.params;
 
@@ -79,7 +78,7 @@ export const getPostById = async (req: AuthRequest, res: Response) => {
 // @desc    Add a comment to a community post
 // @route   POST /api/community/posts/:postId/comments
 // @access  Private (User)
-export const addComment = async (req: AuthRequest, res: Response) => {
+export const addComment = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
     const { postId } = req.params;
@@ -123,7 +122,7 @@ export const addComment = async (req: AuthRequest, res: Response) => {
 // @desc    Toggle like status for a community post
 // @route   PUT /api/community/posts/:postId/like
 // @access  Private (User)
-export const toggleLike = async (req: AuthRequest, res: Response) => {
+export const toggleLike = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
     const { postId } = req.params;
@@ -163,7 +162,7 @@ export const toggleLike = async (req: AuthRequest, res: Response) => {
 // @desc    Soft delete a community post (Admin/Author)
 // @route   PUT /api/community/posts/:postId/delete
 // @access  Private (Admin or Post Author)
-export const softDeletePost = async (req: AuthRequest, res: Response) => {
+export const softDeletePost = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
     const userRole = req.user?.role;
@@ -201,7 +200,7 @@ export const softDeletePost = async (req: AuthRequest, res: Response) => {
 // @desc    Flag a community post for moderation (User)
 // @route   PUT /api/community/posts/:postId/flag
 // @access  Private (User)
-export const flagPost = async (req: AuthRequest, res: Response) => {
+export const flagPost = async (req: Request, res: Response) => {
    try {
     const userId = req.user?._id;
     const { postId } = req.params;
@@ -230,7 +229,7 @@ export const flagPost = async (req: AuthRequest, res: Response) => {
 // @desc    Unflag a community post (Admin)
 // @route   PUT /api/community/posts/:postId/unflag
 // @access  Private (Admin)
-export const unflagPost = async (req: AuthRequest, res: Response) => {
+export const unflagPost = async (req: Request, res: Response) => {
    try {
     const userId = req.user?._id;
     const userRole = req.user?.role;
@@ -260,7 +259,7 @@ export const unflagPost = async (req: AuthRequest, res: Response) => {
 // @desc    Get all flagged community posts (Admin)
 // @route   GET /api/community/posts/flagged
 // @access  Private (Admin)
-export const getFlaggedPosts = async (req: AuthRequest, res: Response) => {
+export const getFlaggedPosts = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
     const userRole = req.user?.role;

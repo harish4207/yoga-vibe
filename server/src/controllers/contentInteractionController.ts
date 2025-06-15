@@ -4,7 +4,6 @@ import { Content } from '../models/Content'; // Assuming you have a Content mode
 import { IUser } from '../models/User'; // Assuming IUser is exported from User model
 import mongoose from 'mongoose';
 import * as contentInteractionService from '../services/contentInteractionService';
-import { AuthRequest } from '../types/express';
 
 // Helper function to find or create interaction
 const findOrCreateInteraction = async (userId: mongoose.Types.ObjectId, contentId: string) => {
@@ -21,7 +20,7 @@ const findOrCreateInteraction = async (userId: mongoose.Types.ObjectId, contentI
 // @desc    Toggle bookmark status for content
 // @route   PUT /api/interactions/bookmark/:contentId
 // @access  Private (User)
-export const toggleBookmark = async (req: AuthRequest, res: Response) => {
+export const toggleBookmark = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
     const { contentId } = req.params;
@@ -58,7 +57,7 @@ export const toggleBookmark = async (req: AuthRequest, res: Response) => {
 // @desc    Submit rating for content
 // @route   PUT /api/interactions/rate/:contentId
 // @access  Private (User)
-export const rateContent = async (req: AuthRequest, res: Response) => {
+export const rateContent = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
     const { contentId } = req.params;
@@ -100,7 +99,7 @@ export const rateContent = async (req: AuthRequest, res: Response) => {
 // @desc    Submit feedback for content
 // @route   PUT /api/interactions/feedback/:contentId
 // @access  Private (User)
-export const submitFeedback = async (req: AuthRequest, res: Response) => {
+export const submitFeedback = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
     const { contentId } = req.params;
@@ -142,7 +141,7 @@ export const submitFeedback = async (req: AuthRequest, res: Response) => {
 // @desc    Mark content as completed
 // @route   PUT /api/interactions/complete/:contentId
 // @access  Private (User)
-export const markCompleted = async (req: AuthRequest, res: Response) => {
+export const markCompleted = async (req: Request, res: Response) => {
   try {
     const userId = req.user?._id;
     const { contentId } = req.params;
