@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+import path from 'path';
 import { rateLimit } from 'express-rate-limit';
 import mongoose from 'mongoose';
 import { config } from './config';
@@ -101,6 +102,14 @@ app.use('/api/interactions', interactionRoutes);
 app.use('/api/community', communityRoutes);
 app.use('/api', chatRoutes);
 app.use('/api/messages', messageRoutes);
+
+// Serve static files from the React app's build directory
+app.use(express.static(path.join(__dirname, '../../client/build')));
+
+// All remaining requests return the React app, so it can handle routing.
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../client', 'build', 'index.html'));
+});
 
 // Error handling middleware
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
