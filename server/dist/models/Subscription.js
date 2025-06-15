@@ -40,7 +40,6 @@ const subscriptionSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',
         required: [true, 'Please provide a user'],
-        unique: true,
     },
     plan: {
         type: String,
@@ -72,7 +71,7 @@ const subscriptionSchema = new mongoose_1.Schema({
     timestamps: true,
 });
 // Index for efficient querying
-subscriptionSchema.index({ user: 1 });
+// Removed: subscriptionSchema.index({ user: 1 });
 subscriptionSchema.index({ status: 1, endDate: 1 });
 // Middleware to check subscription expiration
 subscriptionSchema.pre('save', async function (next) {

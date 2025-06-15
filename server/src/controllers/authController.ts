@@ -113,14 +113,18 @@ export const googleAuthCallback = async (req: Request, res: Response, next: Next
     // End of temporary logging
 
     // Initialize Google OAuth2 client
-    if (!(config as any).google.clientId || !(config as any).google.clientSecret || !(config as any).google.redirectUri) {
+    const googleClientId = process.env.GOOGLE_CLIENT_ID as string;
+    const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET as string;
+    const googleRedirectUri = process.env.GOOGLE_REDIRECT_URI as string;
+
+    if (!googleClientId || !googleClientSecret || !googleRedirectUri) {
       throw new Error('Google OAuth configuration is missing.');
     }
 
     const client = new OAuth2Client(
-      (config as any).google.clientId,
-      (config as any).google.clientSecret,
-      (config as any).google.redirectUri
+      googleClientId,
+      googleClientSecret,
+      googleRedirectUri
     );
 
     // Exchange authorization code for tokens
@@ -219,4 +223,4 @@ export const updateProfile = async (req: Request, res: Response, next: NextFunct
   } catch (err) {
     next(err);
   }
-}; 
+};

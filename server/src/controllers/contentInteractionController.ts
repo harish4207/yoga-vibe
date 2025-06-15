@@ -4,18 +4,15 @@ import { Content } from '../models/Content'; // Assuming you have a Content mode
 import { IUser } from '../models/User'; // Assuming IUser is exported from User model
 import mongoose from 'mongoose';
 import * as contentInteractionService from '../services/contentInteractionService';
-
-// Extend Request to include user
-interface AuthRequest extends Request {
-  user?: IUser;
-}
+import { AuthRequest } from '../types/express';
 
 // Helper function to find or create interaction
-const findOrCreateInteraction = async (userId: mongoose.Types.ObjectId, contentId: mongoose.Types.ObjectId) => {
-  let interaction = await UserContentInteraction.findOne({ userId, contentId });
+const findOrCreateInteraction = async (userId: mongoose.Types.ObjectId, contentId: string) => {
+  const contentObjectId = new mongoose.Types.ObjectId(contentId);
+  let interaction = await UserContentInteraction.findOne({ user: userId, content: contentObjectId });
 
   if (!interaction) {
-    interaction = new UserContentInteraction({ userId, contentId });
+    interaction = new UserContentInteraction({ user: userId, content: contentObjectId });
     await interaction.save();
   }
   return interaction;
@@ -44,8 +41,8 @@ export const toggleBookmark = async (req: AuthRequest, res: Response) => {
     }
 
     const interaction = await findOrCreateInteraction(
-      new mongoose.Types.ObjectId(userId),
-      new mongoose.Types.ObjectId(contentId)
+      userId as mongoose.Types.ObjectId,
+      contentId
     );
 
     interaction.bookmarked = !interaction.bookmarked;
@@ -86,8 +83,8 @@ export const rateContent = async (req: AuthRequest, res: Response) => {
     }
 
     const interaction = await findOrCreateInteraction(
-      new mongoose.Types.ObjectId(userId),
-      new mongoose.Types.ObjectId(contentId)
+      userId as mongoose.Types.ObjectId,
+      contentId
     );
 
     interaction.rating = rating;
@@ -128,8 +125,8 @@ export const submitFeedback = async (req: AuthRequest, res: Response) => {
     }
 
     const interaction = await findOrCreateInteraction(
-      new mongoose.Types.ObjectId(userId),
-      new mongoose.Types.ObjectId(contentId)
+      userId as mongoose.Types.ObjectId,
+      contentId
     );
 
     interaction.feedback = feedback.trim();
@@ -165,8 +162,8 @@ export const markCompleted = async (req: AuthRequest, res: Response) => {
     }
 
     const interaction = await findOrCreateInteraction(
-      new mongoose.Types.ObjectId(userId),
-      new mongoose.Types.ObjectId(contentId)
+      userId as mongoose.Types.ObjectId,
+      contentId
     );
 
     interaction.completed = true;

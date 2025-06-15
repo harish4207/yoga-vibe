@@ -2,21 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
 import { User, IUser } from '../models/User';
+import { AuthRequest } from '../types/express';
 
-// Extend Express Request type to include user
-declare global {
-  namespace Express {
-    interface Request {
-      user?: IUser;
-    }
-  }
-}
-
-export interface AuthRequest extends Request {
-  user?: IUser;
-}
-
-export const auth = async (req: Request, res: Response, next: NextFunction) => {
+export const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -37,4 +25,4 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     res.status(401).json({ success: false, message: 'Token is not valid' });
   }
-}; 
+};

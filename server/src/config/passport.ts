@@ -1,7 +1,6 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { User } from '../models/User';
-import { config } from './index';
 
 passport.serializeUser((user: any, done) => {
   done(null, user.id);
@@ -19,9 +18,9 @@ passport.deserializeUser(async (id: string, done) => {
 passport.use(
   new GoogleStrategy(
     {
-      clientID: config.google.clientId!,
-      clientSecret: config.google.clientSecret!,
-      callbackURL: config.google.redirectUri!,
+      clientID: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      callbackURL: process.env.GOOGLE_REDIRECT_URI!,
     },
     async (accessToken, refreshToken, profile, done) => {
       try {

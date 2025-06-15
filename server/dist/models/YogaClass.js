@@ -100,6 +100,23 @@ const yogaClassSchema = new mongoose_1.Schema({
         type: String,
         default: '',
     },
+    paymentPlanId: {
+        type: String,
+        sparse: true,
+    },
+    paymentAmount: {
+        type: Number,
+        sparse: true,
+    },
+    status: {
+        type: String,
+        enum: ['active', 'inactive', 'completed', 'cancelled', 'scheduled'],
+        default: 'scheduled',
+    },
+    enrolledStudents: [{
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'User',
+        }],
     ratings: [
         {
             user: {

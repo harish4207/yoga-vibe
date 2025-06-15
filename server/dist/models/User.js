@@ -42,36 +42,53 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const userSchema = new mongoose_1.Schema({
     name: {
         type: String,
-        required: [true, 'Please provide a name'],
+        required: [true, 'Name is required'],
         trim: true,
-        maxlength: [50, 'Name cannot be more than 50 characters'],
     },
     email: {
         type: String,
-        required: [true, 'Please provide an email'],
+        required: [true, 'Email is required'],
         unique: true,
-        lowercase: true,
         trim: true,
-        match: [
-            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-            'Please provide a valid email',
-        ],
+        lowercase: true,
+        match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address'],
     },
     password: {
         type: String,
-        required: [true, 'Please provide a password'],
-        minlength: [6, 'Password must be at least 6 characters'],
+        required: function () { return !this.googleId; },
+        minlength: [6, 'Password must be at least 6 characters long'],
         select: false,
+    },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true,
     },
     role: {
         type: String,
-        enum: ['user', 'admin', 'instructor'],
+        enum: ['user', 'instructor', 'admin'],
         default: 'user',
     },
-    profilePicture: {
-        type: String,
-        default: '',
+    profilePicture: String,
+    bio: String,
+    phone: String,
+    yogaLevel: String,
+    stripeCustomerId: String,
+    address: {
+        street: String,
+        city: String,
+        state: String,
+        zipCode: String,
+        country: String,
     },
+    enrolledClasses: [{
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'Class',
+        }],
+    teachingClasses: [{
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'Class',
+        }],
     subscription: {
         plan: {
             type: String,
@@ -88,25 +105,36 @@ const userSchema = new mongoose_1.Schema({
     },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
+    otp: String,
+    otpExpire: Date,
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
 }, {
     timestamps: true,
 });
 // Hash password before saving
 userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) {
-        return next();
+    // Check if password is being modified and is not already hashed
+    if (this.isModified('password') && this.password && !this.password.startsWith('$2a$') && !this.password.startsWith('$2b$')) {
+        try {
+            const salt = await bcryptjs_1.default.genSalt(10);
+            this.password = await bcryptjs_1.default.hash(this.password, salt);
+            next();
+        }
+        catch (error) {
+            next(error);
+        }
     }
-    try {
-        const salt = await bcryptjs_1.default.genSalt(10);
-        this.password = await bcryptjs_1.default.hash(this.password, salt);
+    else {
         next();
-    }
-    catch (error) {
-        next(error);
     }
 });
 // Compare password method
 userSchema.methods.comparePassword = async function (candidatePassword) {
+    if (!this.password)
+        return Promise.resolve(false);
     try {
         return await bcryptjs_1.default.compare(candidatePassword, this.password);
     }
@@ -114,4 +142,9 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
         throw error;
     }
 };
+// Add indexes for better query performance
+// userSchema.index({ email: 1 }); // Removed as unique: true is already set above
+userSchema.index({ role: 1 });
+userSchema.index({ stripeCustomerId: 1 });
+// userSchema.index({ googleId: 1 }, { unique: true, sparse: true }); // Removed as unique: true, sparse: true is already set above
 exports.User = mongoose_1.default.model('User', userSchema);

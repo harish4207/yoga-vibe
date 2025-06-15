@@ -3,7 +3,7 @@ import CommunityPost, { ICommunityPost, IComment } from '../models/CommunityPost
 import { Content } from '../models/Content';
 import { IUser } from '../models/User'; // Assuming IUser is exported from User model
 import mongoose from 'mongoose';
-import { AuthRequest } from '../middleware/auth';
+import { AuthRequest } from '../types/express';
 
 // @desc    Create a new community post
 // @route   POST /api/community/posts
