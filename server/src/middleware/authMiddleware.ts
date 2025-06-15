@@ -10,6 +10,10 @@ declare module 'express-serve-static-core' {
   }
 }
 
+export interface AuthenticatedRequest extends Request {
+  user?: IUser & Document;
+}
+
 export const authenticateJWT = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.header('Authorization');
   const token = authHeader?.replace('Bearer ', '');
