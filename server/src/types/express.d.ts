@@ -19,5 +19,9 @@ declare global {
   }
 }
 
+export interface AuthRequest extends Request {
+  user?: IUser;
+}
+
 // This is a placeholder to ensure this file is treated as a module
 export {}; 
