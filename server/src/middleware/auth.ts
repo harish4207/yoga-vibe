@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
-import { IUser } from '../models/User';
+import { User, IUser } from '../models/User';
 
 // Extend Express Request type to include user
 declare global {
@@ -25,7 +25,14 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const decoded = jwt.verify(token, config.jwt.secret) as { id: string };
-    req.user = { id: decoded.id } as IUser;
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'User not found' });
+    }
+
+    req.user = user;
     next();
   } catch (err) {
     res.status(401).json({ success: false, message: 'Token is not valid' });

@@ -113,14 +113,14 @@ export const googleAuthCallback = async (req: Request, res: Response, next: Next
     // End of temporary logging
 
     // Initialize Google OAuth2 client
-    if (!config.google.clientId || !config.google.clientSecret || !config.google.redirectUri) {
+    if (!(config as any).google.clientId || !(config as any).google.clientSecret || !(config as any).google.redirectUri) {
       throw new Error('Google OAuth configuration is missing.');
     }
 
     const client = new OAuth2Client(
-      config.google.clientId,
-      config.google.clientSecret,
-      config.google.redirectUri
+      (config as any).google.clientId,
+      (config as any).google.clientSecret,
+      (config as any).google.redirectUri
     );
 
     // Exchange authorization code for tokens
