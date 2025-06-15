@@ -53,9 +53,14 @@ const ClassesSection: React.FC = () => {
     const fetchClasses = async () => {
       try {
         const response = await api.get('/classes');
-        // Filter for classes with status 'scheduled' or 'ongoing' to show only relevant classes to users
-        const activeClasses = response.data.data.filter((cls: ClassItem) => cls.status === 'scheduled' || cls.status === 'ongoing');
-        setClasses(activeClasses);
+        console.log('API Response:', response.data);
+        if (response.data && response.data.data) {
+          const activeClasses = response.data.data.filter((cls: ClassItem) => cls.status === 'scheduled' || cls.status === 'ongoing');
+          setClasses(activeClasses);
+        } else {
+          console.warn('API response.data or response.data.data is undefined or null:', response.data);
+          setClasses([]); // Ensure classes is always an array
+        }
         setLoading(false);
       } catch (err: any) {
         console.error('Error fetching classes:', err);
