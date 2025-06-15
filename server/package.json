@@ -57,8 +57,6 @@
     "@types/passport-google-oauth20": "^2.0.16",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3",
-    "@types/razorpay": "^2.0.12",
-    "@types/stripe": "^8.0.0",
-    "@types/google__generative-ai": "^0.1.0"
+    "@types/stripe": "^8.0.0"
   }
 }
