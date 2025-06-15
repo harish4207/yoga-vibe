@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import * as paymentController from '../controllers/paymentController';
 import { authenticateJWT } from '../middleware/authMiddleware';
-import { authorizeRoles } from '../middleware/roleMiddleware';
+import { authorizeRoles } from '../middleware/authMiddleware';
 
 const router = Router();
 

@@ -7,12 +7,12 @@ const router = Router();
 console.log('Content Controller imported in routes:', contentController);
 
 // Public route to get all content (e.g., for user dashboard)
-router.get('/content', contentController.getAllContent);
+router.get('/', contentController.getAllContent);
 
 // Admin routes for content management
-router.post('/content', authenticateJWT, authorizeRoles(['admin']), contentController.createContent);
-router.get('/content/:id', authenticateJWT, authorizeRoles(['admin']), contentController.getContentById);
-router.put('/content/:id', authenticateJWT, authorizeRoles(['admin']), contentController.updateContent);
-router.delete('/content/:id', authenticateJWT, authorizeRoles(['admin']), contentController.deleteContent);
+router.post('/', authenticateJWT, authorizeRoles(['admin']), contentController.createContent);
+router.get('/:id', authenticateJWT, authorizeRoles(['admin']), contentController.getContentById);
+router.put('/:id', authenticateJWT, authorizeRoles(['admin']), contentController.updateContent);
+router.delete('/:id', authenticateJWT, authorizeRoles(['admin']), contentController.deleteContent);
 
 export default router; 

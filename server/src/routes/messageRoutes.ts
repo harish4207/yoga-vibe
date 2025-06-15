@@ -1,7 +1,6 @@
 import express from 'express';
 import * as messageController from '../controllers/messageController';
-import { authorizeRoles } from '../middleware/roleMiddleware';
-import { authenticateJWT } from '../middleware/authMiddleware';
+import { authenticateJWT, authorizeRoles } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -9,6 +8,6 @@ const router = express.Router();
 router.post('/contact', messageController.createMessage);
 
 // Route to get all messages (Admin only)
-router.get('/contact', authenticateJWT, authorizeRoles('admin'), messageController.getAllMessages);
+router.get('/contact', authenticateJWT, authorizeRoles(['admin']), messageController.getAllMessages);
 
 export default router; 

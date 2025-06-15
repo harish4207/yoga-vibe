@@ -1,6 +1,5 @@
 import express from 'express';
-import { auth } from '../middleware/auth'; // Assuming auth middleware is in this path
-import { isAdmin } from '../middleware/isAdmin'; // Assuming isAdmin middleware is in this path
+import { authenticateJWT, authorizeRoles } from '../middleware/authMiddleware';
 import {
   createPost,
   getPosts,
@@ -16,16 +15,16 @@ import {
 const router = express.Router();
 
 // User Community Routes (Private - User)
-router.post('/posts', auth, createPost); // Create a new post
+router.post('/posts', authenticateJWT, createPost); // Create a new post
 router.get('/posts', getPosts); // Get all posts (public/private depending on role)
 router.get('/posts/:postId', getPostById); // Get a single post
-router.post('/posts/:postId/comments', auth, addComment); // Add a comment
-router.put('/posts/:postId/like', auth, toggleLike); // Toggle like status
-router.put('/posts/:postId/flag', auth, flagPost); // Flag post for moderation
+router.post('/posts/:postId/comments', authenticateJWT, addComment); // Add a comment
+router.put('/posts/:postId/like', authenticateJWT, toggleLike); // Toggle like status
+router.put('/posts/:postId/flag', authenticateJWT, flagPost); // Flag post for moderation
 
 // Admin Community Routes (Private - Admin)
-router.put('/posts/:postId/delete', auth, softDeletePost); // Soft delete post (can be admin or author)
-router.put('/posts/:postId/unflag', auth, isAdmin, unflagPost); // Unflag post (admin only)
-router.get('/posts/flagged', auth, isAdmin, getFlaggedPosts); // Get all flagged posts (admin only)
+router.put('/posts/:postId/delete', authenticateJWT, softDeletePost); // Soft delete post (can be admin or author)
+router.put('/posts/:postId/unflag', authenticateJWT, authorizeRoles(['admin']), unflagPost); // Unflag post (admin only)
+router.get('/posts/flagged', authenticateJWT, authorizeRoles(['admin']), getFlaggedPosts); // Get all flagged posts (admin only)
 
 export default router; 
