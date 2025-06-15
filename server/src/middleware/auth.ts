@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
-import { User, IUser } from '../models/User';
+import { User } from '../models/User';
 
 // Extend Express Request type to include user
 declare global {
@@ -16,7 +16,7 @@ export interface AuthRequest extends Request {
   user?: IUser;
 }
 
-export const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
 

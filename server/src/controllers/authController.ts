@@ -113,7 +113,7 @@ export const googleAuthCallback = async (req: Request, res: Response, next: Next
     // End of temporary logging
 
     // Initialize Google OAuth2 client
-    if (!config.google) {
+    if (!config.google.clientId || !config.google.clientSecret || !config.google.redirectUri) {
       throw new Error('Google OAuth configuration is missing.');
     }
 

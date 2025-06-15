@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import Content from '../models/Content';
-import { IContent } from '../models/Content';
+import { Content, IContent } from '../models/Content';
 
 // Content controller functions
 

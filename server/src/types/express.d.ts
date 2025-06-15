@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { JwtPayload as _JwtPayload } from 'jsonwebtoken';
+import { IUser } from '../models/User';
 
 // Define an interface for the JWT payload
 interface JwtPayload extends _JwtPayload {
@@ -11,13 +12,7 @@ interface JwtPayload extends _JwtPayload {
 declare global {
   namespace Express {
     interface Request {
-      user?: {
-        id: string;
-        email: string;
-        role: string;
-        // Add any other properties your decoded JWT payload has
-        // e.g., iat?: number; exp?: number;
-      };
+      user?: IUser;
       file?: Express.Multer.File; // For single file uploads
       files?: Express.Multer.File[] | { [fieldname: string]: Express.Multer.File[] }; // For multiple file uploads
     }

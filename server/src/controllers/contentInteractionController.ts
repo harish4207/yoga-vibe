@@ -33,9 +33,9 @@ export const toggleBookmark = async (req: AuthRequest, res: Response) => {
       return res.status(401).json({ success: false, message: 'User not authenticated' });
     }
     
-     if (!contentId || !mongoose.Types.ObjectId.isValid(contentId)) {
-        return res.status(400).json({ success: false, message: 'Invalid content ID' });
-     }
+    if (!contentId || !mongoose.Types.ObjectId.isValid(contentId)) {
+      return res.status(400).json({ success: false, message: 'Invalid content ID' });
+    }
 
     // Ensure content exists
     const content = await Content.findById(contentId);
@@ -43,7 +43,10 @@ export const toggleBookmark = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ success: false, message: 'Content not found' });
     }
 
-    const interaction = await findOrCreateInteraction(userId, new mongoose.Types.ObjectId(contentId as string));
+    const interaction = await findOrCreateInteraction(
+      new mongoose.Types.ObjectId(userId),
+      new mongoose.Types.ObjectId(contentId)
+    );
 
     interaction.bookmarked = !interaction.bookmarked;
     await interaction.save();
@@ -69,20 +72,23 @@ export const rateContent = async (req: AuthRequest, res: Response) => {
     }
 
     if (rating === undefined || rating < 1 || rating > 5) {
-       return res.status(400).json({ success: false, message: 'Invalid rating value (must be 1-5)' });
+      return res.status(400).json({ success: false, message: 'Invalid rating value (must be 1-5)' });
     }
 
-     if (!contentId || !mongoose.Types.ObjectId.isValid(contentId)) {
-        return res.status(400).json({ success: false, message: 'Invalid content ID' });
-     }
+    if (!contentId || !mongoose.Types.ObjectId.isValid(contentId)) {
+      return res.status(400).json({ success: false, message: 'Invalid content ID' });
+    }
 
-     // Ensure content exists
+    // Ensure content exists
     const content = await Content.findById(contentId);
     if (!content) {
       return res.status(404).json({ success: false, message: 'Content not found' });
     }
 
-    const interaction = await findOrCreateInteraction(userId, new mongoose.Types.ObjectId(contentId as string));
+    const interaction = await findOrCreateInteraction(
+      new mongoose.Types.ObjectId(userId),
+      new mongoose.Types.ObjectId(contentId)
+    );
 
     interaction.rating = rating;
     await interaction.save();
@@ -98,7 +104,7 @@ export const rateContent = async (req: AuthRequest, res: Response) => {
 // @route   PUT /api/interactions/feedback/:contentId
 // @access  Private (User)
 export const submitFeedback = async (req: AuthRequest, res: Response) => {
-   try {
+  try {
     const userId = req.user?._id;
     const { contentId } = req.params;
     const { feedback } = req.body;
@@ -108,20 +114,23 @@ export const submitFeedback = async (req: AuthRequest, res: Response) => {
     }
 
     if (feedback === undefined || feedback.trim() === '') {
-       return res.status(400).json({ success: false, message: 'Feedback cannot be empty' });
+      return res.status(400).json({ success: false, message: 'Feedback cannot be empty' });
     }
 
-      if (!contentId || !mongoose.Types.ObjectId.isValid(contentId)) {
-        return res.status(400).json({ success: false, message: 'Invalid content ID' });
-     }
+    if (!contentId || !mongoose.Types.ObjectId.isValid(contentId)) {
+      return res.status(400).json({ success: false, message: 'Invalid content ID' });
+    }
 
-     // Ensure content exists
+    // Ensure content exists
     const content = await Content.findById(contentId);
     if (!content) {
       return res.status(404).json({ success: false, message: 'Content not found' });
     }
 
-    const interaction = await findOrCreateInteraction(userId, new mongoose.Types.ObjectId(contentId as string));
+    const interaction = await findOrCreateInteraction(
+      new mongoose.Types.ObjectId(userId),
+      new mongoose.Types.ObjectId(contentId)
+    );
 
     interaction.feedback = feedback.trim();
     await interaction.save();
@@ -137,7 +146,7 @@ export const submitFeedback = async (req: AuthRequest, res: Response) => {
 // @route   PUT /api/interactions/complete/:contentId
 // @access  Private (User)
 export const markCompleted = async (req: AuthRequest, res: Response) => {
-   try {
+  try {
     const userId = req.user?._id;
     const { contentId } = req.params;
 
@@ -145,17 +154,20 @@ export const markCompleted = async (req: AuthRequest, res: Response) => {
       return res.status(401).json({ success: false, message: 'User not authenticated' });
     }
 
-     if (!contentId || !mongoose.Types.ObjectId.isValid(contentId)) {
-        return res.status(400).json({ success: false, message: 'Invalid content ID' });
-     }
+    if (!contentId || !mongoose.Types.ObjectId.isValid(contentId)) {
+      return res.status(400).json({ success: false, message: 'Invalid content ID' });
+    }
 
-     // Ensure content exists
+    // Ensure content exists
     const content = await Content.findById(contentId);
     if (!content) {
       return res.status(404).json({ success: false, message: 'Content not found' });
     }
 
-    const interaction = await findOrCreateInteraction(userId, new mongoose.Types.ObjectId(contentId as string));
+    const interaction = await findOrCreateInteraction(
+      new mongoose.Types.ObjectId(userId),
+      new mongoose.Types.ObjectId(contentId)
+    );
 
     interaction.completed = true;
     // Optionally update viewDuration or lastViewedAt here if tracking views
