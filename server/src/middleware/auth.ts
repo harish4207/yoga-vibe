@@ -12,7 +12,11 @@ declare global {
   }
 }
 
-export const auth = async (req: Request, res: Response, next: NextFunction) => {
+export interface AuthRequest extends Request {
+  user?: IUser;
+}
+
+export const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -20,7 +24,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
       throw new Error();
     }
 
-    const decoded = jwt.verify(token, config.jwt.secret) as any;
+    const decoded = jwt.verify(token, config.jwt.secret) as { id: string };
     const user = await User.findOne({ _id: decoded.id });
 
     if (!user) {

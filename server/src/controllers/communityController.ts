@@ -3,11 +3,7 @@ import CommunityPost, { ICommunityPost, IComment } from '../models/CommunityPost
 import { Content } from '../models/Content';
 import { IUser } from '../models/User'; // Assuming IUser is exported from User model
 import mongoose from 'mongoose';
-
-// Extend Request to include user
-interface AuthRequest extends Request {
-  user?: IUser;
-}
+import { AuthRequest } from '../middleware/auth';
 
 // @desc    Create a new community post
 // @route   POST /api/community/posts

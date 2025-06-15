@@ -20,6 +20,4 @@ const ContentSchema: Schema = new Schema({
   url: { type: String, required: true, trim: true },
 }, { timestamps: true });
 
-const Content = mongoose.model<IContent>('Content', ContentSchema);
-
-export default Content; 
+export const Content = mongoose.model<IContent>('Content', ContentSchema); 

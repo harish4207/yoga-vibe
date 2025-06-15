@@ -21,7 +21,7 @@ passport.use(
     {
       clientID: config.google.clientId!,
       clientSecret: config.google.clientSecret!,
-      callbackURL: config.google.callbackUrl!,
+      callbackURL: config.google.redirectUri!,
     },
     async (accessToken, refreshToken, profile, done) => {
       try {

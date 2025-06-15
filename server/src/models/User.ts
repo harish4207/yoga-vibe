@@ -4,6 +4,7 @@ import jwt, { SignOptions } from 'jsonwebtoken';
 import { config } from '../config';
 
 export interface IUser extends Document {
+  id: string;
   name: string;
   email: string;
   password?: string;
