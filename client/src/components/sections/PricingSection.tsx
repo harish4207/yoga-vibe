@@ -48,7 +48,13 @@ const PricingSection: React.FC = () => {
       try {
         setLoading(true);
         const response = await axios.get('/api/subscriptions/plans');
-        setPlans(response.data.data);
+        console.log('Pricing API Response:', response.data);
+        if (response.data && Array.isArray(response.data.data)) {
+          setPlans(response.data.data);
+        } else {
+          console.warn('Pricing API response.data or response.data.data is not an array:', response.data);
+          setPlans([]); // Ensure plans is always an array
+        }
       } catch (err) {
         console.error('Error fetching subscription plans:', err);
         setError('Failed to load subscription plans.');
